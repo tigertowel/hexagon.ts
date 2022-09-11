@@ -34,7 +34,7 @@ export class PointyLayout implements Layout {
     }
 }
 
-export class FlatLayout<T> extends PointyLayout {
+export class FlatLayout extends PointyLayout {
 
     protected polygonOffset: number = Math.PI / 6;
 

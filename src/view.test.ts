@@ -16,9 +16,7 @@ const adapter: Adapter<Point> = {
     },
 }
 
-const view = new View<Point>(adapter, new PointyLayout())
-    .setAngle(Math.PI / 3, 30)
-    .setOffset(0, 0);
+const view = new View<Point>(adapter, new PointyLayout());
 
 test('cubeToPoint / pointToCube back and forth', () => {
     const cube = Cube.fromAxis(6, -4);

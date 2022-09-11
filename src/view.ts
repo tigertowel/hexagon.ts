@@ -6,6 +6,9 @@ type Point = {
     y: number
 };
 
+/**
+ * Adapter to handle different Vector2D objects / classes
+ */
 export interface Adapter<T> {
     create(x: number, y: number): T;
     extract(point: T): [x: number, y: number];
@@ -17,21 +20,29 @@ export class View<T>  {
 
     protected layout: Layout;
 
-    protected offset: Point;
+    protected offset: Point = {
+        x: 0,
+        y: 0,
+    };
 
-    protected size: Point;
+    protected size: Point = {
+        x: 50,
+        y: 50,
+    };
 
     constructor(adapter: Adapter<T>, layout: Layout) {
         this.adapter = adapter;
         this.layout = layout;
     }
 
-    public setOffset(x: number, y: number): this {
+    public setOffset(point: T): this {
+        const [x, y] = this.adapter.extract(point);
         this.offset = { x, y };
         return this;
     }
 
-    public setSize(x: number, y: number): this {
+    public setSize(point: T): this {
+        const [x, y] = this.adapter.extract(point);
         this.size = { x, y };
         return this;
     }
@@ -39,7 +50,7 @@ export class View<T>  {
     public setAngle(angle: number, radius: number): this {
         const x = Math.cos(Math.PI / 3.0) * 2 * radius;
         const y = Math.cos(angle) * x;
-        return this.setSize(x, y);
+        return this.setSize(this.adapter.create(x, y));
     }
 
     public cubeToPoint(cube: Cube): T {

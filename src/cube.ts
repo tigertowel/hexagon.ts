@@ -29,19 +29,11 @@ export class Cube {
         );
     }
 
-    public multiply(factor: number): Cube {
+    public scale(factor: number): Cube {
         return new Cube(
             this.q * factor,
             this.r * factor,
             this.s * factor,
-        );
-    }
-
-    public divide(divisor: number): Cube {
-        return new Cube(
-            this.q / divisor,
-            this.r / divisor,
-            this.s / divisor,
         );
     }
 
@@ -54,7 +46,7 @@ export class Cube {
     }
 
     public lerp(other: Cube, t: number): Cube {
-        return other.subtract(this).multiply(t);
+        return other.subtract(this).scale(t);
     }
 
     public getDistanceTo(other: Cube): number {
@@ -68,12 +60,16 @@ export class Cube {
         const dist = this.getDistanceTo(other);
         const diff = other.subtract(this);
         for (let n = 1; n < dist; n++) {
-            line.push(diff.multiply(n / dist).round());
+            line.push(diff.scale(n / dist).round());
         }
         return line;
     }
 
-    public getNear(dist: number): Cube[] {
+    public getNeighbours(): Cube[] {
+        return CubeNeighbours.map(n => n.add(this));
+    }
+
+    public getSurrounding(dist: number): Cube[] {
         let near = [];
         for (let q = -dist; q <= dist; q++) {
             for (let r = Math.max(-dist, -q - dist); r <= Math.min(dist, dist - q); r++) {
@@ -101,16 +97,12 @@ export class Cube {
         return new Cube(q, r, -q - r);
     }
 
-    public getNeighbours(): Cube[] {
-        return Neighbours.map(n => n.add(this));
-    }
-
     public toString(): string {
         return `${this.q}:${this.r}`;
     }
 }
 
-const Neighbours = [
+export const CubeNeighbours = [
     Cube.fromAxis(1, 0),
     Cube.fromAxis(1, -1),
     Cube.fromAxis(0, -1),
