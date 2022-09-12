@@ -1,3 +1,3 @@
-export { Cube } from "./cube";
-export { Layout, FlatLayout, PointyLayout } from "./layout";
+export { Cube, CubeNeighbours } from "./cube";
+export { Layout, PointyLayout, FlatLayout } from "./layout";
 export { Adapter, View } from "./view";
